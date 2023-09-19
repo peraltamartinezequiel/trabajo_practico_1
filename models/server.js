@@ -17,6 +17,11 @@ class Server {
     routers() {
         this.app.use('/api/v1/juegos', require('../routes/juegos'));
         this.app.use('/api/v1/personajes', require('../routes/personajes'));
+        
+        this.app.all('*', (_, res) => {
+            res.send('400 Página no encontrada')
+        })
+    
     }
 
     listen() {
