@@ -8,7 +8,7 @@ const getPersonajes = (req = request, res = response) => {
     console.log(req.params);
     axios.get(`https://api.igdb.com/v4/characters?fields=${fields}&limit=50`,{
         'Client-ID': process.env.CLIENT_ID || client_id,
-        'Authorization': process.env.TOKEN || token
+        'Authorization': process.env.TOKEN || `Bearer ${token}`
     })
     .then(({status, data, statusText}) => {
         console.log();
@@ -32,7 +32,7 @@ const getPersonaje = (req = request, res = response) => {
     const {id} = req.params;
     axios.get(`https://api.igdb.com/v4/characters/${id}?fields=${fields}`,{
         'Client-ID': process.env.CLIENT_ID || client_id,
-        'Authorization': process.env.TOKEN || token
+        'Authorization': process.env.TOKEN || `Bearer ${token}`
     })
     .then(({status, data, statusText}) => {
         console.log();
