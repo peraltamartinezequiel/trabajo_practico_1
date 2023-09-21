@@ -20,10 +20,17 @@ const getPersonajes = (req = request, res = response) => {
     })
     .catch((error)=>{
         console.log(error);
-        res.status(401).json({
-            status:401,
-            msg:'cliente no autorizado.'
-        });
+        if (error.response.status == 400){
+            res.status(400).json({
+                status:400,
+                msg:'Error inesperado.'
+            });
+        } else {
+            res.status(401).json({
+                status:401,
+                msg:'cliente no autorizado.'
+            });
+        }
     });
 }
 
@@ -36,26 +43,33 @@ const getPersonaje = (req = request, res = response) => {
     })
     .then(({status, data, statusText}) => {
         console.log();
-        res.status(200).json({
-            status, 
-            data, 
-            statusText,
-            id
-        });
+        if (data.length == 0) {
+            res.status(404).json ({
+                status:404,
+                msg:'No encontrado'
+            });
+        } else {
+            res.status(200).json({
+                status, 
+                data, 
+                statusText,
+                id
+            });
+        }
     })
     .catch((error)=>{
         console.log(error);
-        res.status(401).json({
-            status:401,
-            msg:'cliente no autorizado.'
-        });
-    })
-    .catch((error)=>{
-        console.log(error);
-        res.status(400).json({
-            status:400,
-            msg:'Error inesperado.'
-        })
+        if (error.response.status == 400){
+            res.status(400).json({
+                status:400,
+                msg:'Error inesperado.'
+            });
+        } else {
+            res.status(401).json({
+                status:401,
+                msg:'cliente no autorizado.'
+            });
+        }
     });
 }
 
