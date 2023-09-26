@@ -34,7 +34,7 @@ const getPersonajes = (req = request, res = response) => {
     });
 }
 
-const getPersonaje = (req = request, res = response) => {
+const getPersonajeId = (req = request, res = response) => {
     console.log(req.params);
     const {id} = req.params;
     axios.get(`https://api.igdb.com/v4/characters/${id}?fields=${fields}`,{
@@ -73,7 +73,40 @@ const getPersonaje = (req = request, res = response) => {
     });
 }
 
+const getPersonajeParams = (req = request, res = response) => {
+    console.log(req.params);
+    const {slug, name} = req.params;
+    axios.get(`https://api.igdb.com/v4/characters/?search=${slug}&search=${name}&fields=${fields}`,{
+        'Client-ID': process.env.CLIENT_ID || client_id,
+        'Authorization': process.env.TOKEN || `Bearer ${token}`
+    })
+    .then(({status, data, statusText}) => {
+        res.status(200).json({
+            status, 
+            data, 
+            statusText,
+            slug,
+            name
+        });
+    })
+    .catch((error)=>{
+        console.log(error);
+        if (error.response.status == 400){
+            res.status(400).json({
+                status:400,
+                msg:'Error inesperado.'
+            });
+        } else {
+            res.status(401).json({
+                status:401,
+                msg:'cliente no autorizado.'
+            });
+        }
+    });
+}
+
 module.exports = {
     getPersonajes,
-    getPersonaje
+    getPersonajeId,
+    getPersonajeParams
 }
